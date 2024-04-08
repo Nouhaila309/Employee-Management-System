@@ -7,10 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serial;
 
@@ -18,9 +19,9 @@ import java.io.Serial;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Vacation_Status")
+@Table(name = "Status")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class VacationStatus implements java.io.Serializable {
+public class Status implements java.io.Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -31,8 +32,5 @@ public class VacationStatus implements java.io.Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-
-    public VacationStatus(int id){
-    }
 
 }

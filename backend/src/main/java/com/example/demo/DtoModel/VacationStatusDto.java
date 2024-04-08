@@ -1,7 +1,5 @@
 package com.example.demo.DtoModel;
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VacationStatusDto {
+public class VacationStatusDTO {
 
-    private int VacationStatusId;
-    private String VacationStatusName;
+    private int id;
+    private String name;
 
 }

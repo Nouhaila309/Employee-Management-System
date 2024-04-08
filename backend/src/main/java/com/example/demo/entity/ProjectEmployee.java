@@ -1,10 +1,7 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,18 +15,13 @@ import java.io.Serial;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Role")
+@Table(name = "Project_Employee")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Role implements java.io.Serializable {
+public class ProjectEmployee implements java.io.Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
-    private int id;
-    @Column(name = "name", nullable = false)
-    private String name;
-
+    @EmbeddedId
+    private ProjectEmployeeId projectEmployeeId;
 
 }

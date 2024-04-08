@@ -1,31 +1,27 @@
 package com.example.demo.DtoModel;
-import com.example.demo.entity.EvaluationRated;
+
+import java.util.Date;
+
+import com.example.demo.entity.Employee;
 import com.example.demo.entity.Role;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+public class EmployeeDTO {
 
-public class EmployeeDto {
-
-    private Integer employeeId;
-    private String employeeFirstName;
-    private String employeeLastName;
-    private Double employeeSalary;
-    private String employeeGender;
-    private String employeeEmail;
-    private String employeePhoneNumber;
-    private String employeeCity;
-    private String employeeDiploma;
-    private LocalDate joinCompanyStartDate;
+    private String username;
+    private Employee responsible;
     private Role role;
-    private EvaluationRated evaluationRated;
+    private String password;
+    private String fullName;
+    private String email;
+    private Date joinDate;
+    private Date leaveDate;
+    private float initialBalance;
+    private float currentBalance;
 
 }
-

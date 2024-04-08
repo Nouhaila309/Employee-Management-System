@@ -1,56 +1,61 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.io.Serial;
+import java.util.Date;
 
-import java.time.LocalDate;
-import java.util.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
-@Entity
-@Table(name = "employee")
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Employee {
+@Entity
+@Table(name = "Employee")
+public class Employee implements java.io.Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employee_id")
-    private Integer employeeId;
-    private String employeeFirstName;
-    private String employeeLastName;
-    private Double employeeSalary;
-    private String employeeGender;
-    private String employeeEmail;
-    private String employeePhoneNumber;
-    private String employeeCity;
-    private String employeeDiploma;
-    private LocalDate joinCompanyStartDate;
-    @Enumerated(EnumType.STRING)
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "responsible")
+    private Employee responsible;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roleId")
     private Role role;
-    @Enumerated(EnumType.STRING)
-    private EvaluationRated evaluationRated;
+    @JsonIgnore
+    @Column(name = "password", nullable = false)
+    private String password;
+    @Column(name = "fullName", nullable = false)
+    private String fullName;
+    @Column(name = "email", nullable = false)
+    private String email;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "joinDate", nullable = false, length = 10)
+    private Date joinDate;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "leaveDate", length = 10)
+    private Date leaveDate;
+    @Column(name = "initialBalance", nullable = false, precision = 12, scale = 0)
+    private float initialBalance;
+    @Column(name = "currentBalance", nullable = false, precision = 12, scale = 0)
+    private float currentBalance;
 
+    public Employee(String username) {
+        this.username = username;
+    }
 
-    /* @OneToMany(mappedBy = "employee")
-    private Set<Vacation> vacations = new HashSet<>();
-@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
- private Set<Notification> notifications;*/
-    /*@ManyToOne
-    @JoinColumn(name = "positionId")
-    private Position position;*/
-
-   /* @ManyToMany(mappedBy = "employee")
-    private List<Project> projects = new ArrayList<>();
-
-   /* @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    private Set<PerformanceEvaluation> performanceEvaluations = new HashSet<>();*/
-
-   /* @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
-    private Set<Schedule> schedule = new HashSet<>();*/
-
-
-
-   /* @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    private Set<Absence> absences = new HashSet<>();*/
 }

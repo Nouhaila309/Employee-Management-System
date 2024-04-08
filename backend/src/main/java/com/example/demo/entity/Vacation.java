@@ -1,53 +1,54 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.*;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.util.Date;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Vacation {
+@Entity
+@Table(name = "Vacation")
+public class Vacation implements java.io.Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer vacationId;
-    private Date vacationRequestDate;
-    private Date vacationStartDate;
-    private Date vacationEndDate;
-    private float vacationDuration;
-    private String vacationComment;
-
-    @Enumerated(EnumType.STRING)
-    private VacationStatus status = VacationStatus.PENDING;// Set default status to PENDING
-
-    @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
+    private int id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employeeId", nullable = false)
     private Employee employee;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "requestDate", nullable = false, length = 10)
+    private Date requestDate;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "startDate", nullable = false, length = 10)
+    private Date startDate;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "endDate", nullable = false, length = 10)
+    private Date endDate;
+    @Column(name = "duration", nullable = false, precision = 12, scale = 0)
+    private float duration;
+    @Column(name = "comment", length = 300)
+    private String comment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vacationStatusId", nullable = false)
+    private VacationStatus vacationStatus;
 
-    @OneToMany(mappedBy = "vacation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Notification> notifications;
-
-    public float calculateVacationDuration() {
-        long diffInMillies = Math.abs(vacationEndDate.getTime() - vacationStartDate.getTime());
-        long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-        return diffInDays;
-    }
-
-
-
-
-
-
-    /*@ManyToOne
-    private Employee employee;*/
 }

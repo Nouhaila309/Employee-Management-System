@@ -1,71 +1,39 @@
 package com.example.demo.service;
 
-import com.example.demo.DtoModel.ConvertVacationDto;
-import com.example.demo.DtoModel.VacationDto;
 import com.example.demo.entity.Employee;
 import com.example.demo.entity.Vacation;
-import com.example.demo.entity.VacationStatus;
-import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.repository.VacationRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-
+@AllArgsConstructor
 @Service
 public class VacationService {
-    @Autowired
-    public VacationRepository vacationRepository;
-    @Autowired
-    public EmployeeRepository employeeRepository;
-    @Autowired
-    public  NotificationService notificationService;
 
-    public List<VacationDto> getAllVacations() {
-        VacationDto vacationDto = new VacationDto();
+    private final VacationRepository vacationRepository;
 
-        return ConvertVacationDto.convertListEntityToListDto(vacationRepository.findAll());
+    public Page<Vacation> findAll(PageRequest pageRequest) {
+        return vacationRepository.findAll(pageRequest);
     }
 
-    public List<VacationDto> getAllVacationsByEmployee(Integer employeeId) {
-        Optional<Employee> employee=this.employeeRepository.findById(employeeId);
-        return employee.map(value -> ConvertVacationDto.convertListEntityToListDto(vacationRepository.findAllByEmployee(value))).orElse(null);
+    public Optional<Vacation> findById(int id) {
+        return vacationRepository.findById(id);
     }
 
+    public Vacation saveAndFlush(Vacation vacation) {
+        return vacationRepository.saveAndFlush(vacation);
+    }
 
-    @Transactional
-    public VacationDto createVacationToEmployee(VacationDto vacationDto, Integer employeeId) {
-        // Fetch the employee from the database
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + employeeId));
+    public void deleteById(int id) {
+        vacationRepository.deleteById(id);
+    }
 
-        // Create a new Vacation entity
-        Vacation vacation = new Vacation();
-
-        // Set other properties from the DTO
-        vacation.setVacationRequestDate(new Date());
-        vacation.setVacationStartDate(vacationDto.getVacationStartDate());
-        vacation.setVacationEndDate(vacationDto.getVacationEndDate());
-        vacation.setVacationComment(vacationDto.getVacationComment());
-        vacation.setStatus(VacationStatus.PENDING);
-        vacation.setEmployee(employee);
-        vacation.setVacationDuration(vacation.calculateVacationDuration());
-
-        // Save the vacation entity
-        vacationRepository.save(vacation);
-
-
-        // Notify the admin
-        notificationService.notifyAdminAboutRequest(vacationDto);
-
-
-        // Convert the saved entity back to DTO for response
-        return ConvertVacationDto.convertEntityToDto(vacation);
-
-
+    public List<Vacation> findAllByEmployee(Employee employee) {
+        return vacationRepository.findAllByEmployee(employee);
     }
 }

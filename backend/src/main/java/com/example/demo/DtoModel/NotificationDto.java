@@ -1,28 +1,21 @@
 package com.example.demo.DtoModel;
 
+import java.util.Date;
 
-import com.example.demo.entity.Employee;
 import com.example.demo.entity.Vacation;
-import com.example.demo.entity.VacationStatus;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotificationDto {
+public class NotificationDTO {
 
-    private Integer notificationId;
-    private String notificationMessage;
-    private Date notificationCreationDate;
-    private boolean notificationRead;
-    private VacationStatus status;
+    private int id;
     private Vacation vacation;
-    private Employee employee;
+    private String message;
+    private Date date;
+    private boolean seen;
+
 }
